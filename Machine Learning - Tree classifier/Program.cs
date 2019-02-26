@@ -88,8 +88,9 @@ namespace Machine_Learning___Tree_classifier
             }
             var predictionFunction = loadedModel.MakePredictionFunction<TaxiTrip, TaxiTripFarePrediction>(mlContext);
 
-            var taxiTripSample = new TaxiTrip()
+            TaxiTrip[] taxiTripArray =  new TaxiTrip[]
             {
+                new TaxiTrip{
                 VendorId = "VTS",
                 RateCode = "1",
                 PassengerCount = 1,
@@ -97,14 +98,28 @@ namespace Machine_Learning___Tree_classifier
                 TripDistance = 3.75f,
                 PaymentType = "CRD",
                 FareAmount = 0 // To predict. Actual/Observed = 15.5
+       
+                }
+                ,
+                new TaxiTrip{
+                    VendorId = "VTS",
+                RateCode = "1",
+                PassengerCount = 1,
+                TripTime = 480,
+                TripDistance = 2.72f,
+                PaymentType = "CRD",
+                FareAmount = 0  //predicted to be 10
+                }
             };
 
-            var prediction = predictionFunction.Predict(taxiTripSample);
+            foreach (var item in taxiTripArray)
+            {
+                var prediction = predictionFunction.Predict(item);
 
-            Console.WriteLine($"**********************************************************************");
-            Console.WriteLine($"Predicted fare: {prediction.FareAmount:0.####}, actual fare: 15.5");
-            Console.WriteLine($"**********************************************************************");
-
+                Console.WriteLine($"**********************************************************************");
+                Console.WriteLine($"Predicted fare: {prediction.FareAmount:0.####}");
+                Console.WriteLine($"**********************************************************************");
+            }
         }
         static void Main(string[] args)
         {
@@ -126,8 +141,8 @@ namespace Machine_Learning___Tree_classifier
                 }
             }
             );
-            var model = Train(mlContext, _trainDataPath);
-            Evaluate(mlContext, model);
+            //var model = Train(mlContext, _trainDataPath);
+            //Evaluate(mlContext, model);
             TestSinglePrediction(mlContext);
             Console.ReadKey();
         }
